@@ -5,6 +5,10 @@ const api = {
     const res = await fetch(URL + "/" + postType + "-posts?page=" + page);
     return res;
   },
+  async getPost(postType, id) {
+    const res = await fetch(URL + "/" + postType + "-posts/" + id);
+    return res;
+  },
   async getSearched(postType, word) {
     const res = await fetch(URL + "/" + postType + "-posts?search=" + word);
     return res;

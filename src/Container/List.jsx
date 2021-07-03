@@ -7,18 +7,33 @@ import {
   createAPageAction,
   createBPageAction,
 } from "../redux/reducers/renderState";
+import {
+  setSearchAListAction,
+  setSearchBListAction,
+} from "../redux/reducers/renderList";
 
 const List = () => {
   const { aList, bList } = useSelector((state) => state.renderList);
   const { postType, aPage, bPage } = useSelector((state) => state.renderState);
+  const searchWord = useSelector((state) => state.searchWord);
   const dispatch = useDispatch();
 
-  document.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+  const addList = () => {
+    const { clientHeight, scrollTop, scrollHeight } = document.documentElement;
+
+    if (scrollTop !== 0 && clientHeight + scrollTop === scrollHeight) {
       postType === "a"
         ? dispatch(createAPageAction())
         : dispatch(createBPageAction());
     }
+  };
+
+  useEffect(() => {
+    document.addEventListener("scroll", addList);
+
+    return () => {
+      document.removeEventListener("scroll", addList);
+    };
   });
 
   useEffect(() => {
@@ -29,8 +44,16 @@ const List = () => {
       if (postType === "a") dispatch(setAListAction(list));
       else dispatch(setBListAction(list));
     };
-    getList();
-  }, [aPage, bPage]);
+    const getSearch = async () => {
+      const res = await api.getSearched(postType, searchWord);
+      const list = await res.json();
+      postType === "a"
+        ? dispatch(setSearchAListAction(list))
+        : dispatch(setSearchBListAction(list));
+    };
+    if (searchWord) getSearch();
+    else getList();
+  }, [aPage, bPage, postType]);
 
   return (
     <ul>

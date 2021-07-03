@@ -1,3 +1,5 @@
+import filterSameId from "../../module/filterSameId";
+
 const SET_A_LIST = "set-a-list";
 const SET_B_LIST = "set-b-list";
 const SET_SEARCH_A_LIST = "set-search-a-list";
@@ -21,9 +23,15 @@ const setSearchBListAction = (payload) => {
 const renderListReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_A_LIST:
-      return { ...state, aList: [...state.aList, ...action.payload] };
+      return {
+        ...state,
+        aList: filterSameId([...state.aList, ...action.payload]),
+      };
     case SET_B_LIST:
-      return { ...state, bList: [...state.bList, ...action.payload] };
+      return {
+        ...state,
+        bList: filterSameId([...state.bList, ...action.payload]),
+      };
     case SET_SEARCH_A_LIST:
       return { ...state, aList: [...action.payload] };
     case SET_SEARCH_B_LIST:
