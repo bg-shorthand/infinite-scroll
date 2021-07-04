@@ -38,11 +38,17 @@ const List = () => {
 
   useEffect(() => {
     const getList = async () => {
+      const newList = [];
       const page = postType === "a" ? aPage : bPage;
-      const res = await api.getList(postType, page);
-      const list = await res.json();
-      if (postType === "a") dispatch(setAListAction(list));
-      else dispatch(setBListAction(list));
+      for (let i = 0; i <= page; i++) {
+        const res = await api.getList(postType, i);
+        const list = await res.json();
+        newList.push(...list);
+      }
+      console.log(newList);
+      postType === "a"
+        ? dispatch(setSearchAListAction(newList))
+        : dispatch(setSearchBListAction(newList));
     };
     const getSearch = async () => {
       const res = await api.getSearched(postType, searchWord);

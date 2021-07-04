@@ -25,12 +25,12 @@ const renderListReducer = (state = initialState, action) => {
     case SET_A_LIST:
       return {
         ...state,
-        aList: filterSameId([...state.aList, ...action.payload]),
+        aList: filterSameId([...action.payload]),
       };
     case SET_B_LIST:
       return {
         ...state,
-        bList: filterSameId([...state.bList, ...action.payload]),
+        bList: filterSameId([...action.payload]),
       };
     case SET_SEARCH_A_LIST:
       return { ...state, aList: [...action.payload] };
